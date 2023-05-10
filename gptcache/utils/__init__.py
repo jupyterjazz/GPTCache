@@ -27,6 +27,7 @@ __all__ = [
     "import_llama_cpp_python",
     "import_ruamel",
     "import_selective_context",
+    "import_in_memory_exact_search",
     ]
 
 import importlib.util
@@ -192,3 +193,7 @@ def import_ruamel():
 
 def import_selective_context():
     _check_library("selective_context")
+
+
+def import_in_memory_exact_search():
+    _check_library("docarray")
