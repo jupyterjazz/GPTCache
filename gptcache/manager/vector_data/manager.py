@@ -104,11 +104,10 @@ class VectorBase:
                 max_elements=max_elements,
             )
         elif name == "docarray":
-            from gptcache.manager.vector_data.docarray_index import \
-                DocArrayIndex
+            from gptcache.manager.vector_data.docarray_index import DocArrayIndex
 
             index_path = kwargs.pop("index_path", "./docarray_index.bin")
-            vector_base = DocArrayIndex(index_file_path=index_path)
+            vector_base = DocArrayIndex(index_file_path=index_path, top_k=top_k)
         else:
             raise NotFoundError("vector store", name)
         return vector_base

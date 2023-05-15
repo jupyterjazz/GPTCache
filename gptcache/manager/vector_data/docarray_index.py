@@ -6,9 +6,9 @@ from docarray.typing import NdArray
 from pydantic import parse_obj_as
 
 from gptcache.manager.vector_data.base import VectorBase, VectorData
-from gptcache.utils import import_in_memory_exact_search
+from gptcache.utils import import_docarray
 
-import_in_memory_exact_search()
+import_docarray()
 
 from docarray import BaseDoc, DocList  # pylint: disable=C0413
 from docarray.index import InMemoryExactNNIndex  # pylint: disable=C0413
@@ -27,16 +27,19 @@ class DocArrayIndex(VectorBase):
 
     :param index_file_path: the path to docarray index, defaults to 'docarray_index.bin'.
     :type index_file_path: str
+    :param top_k: the number of the vectors results to return, defaults to 1.
+    :type top_k: int
     """
 
-    def __init__(self, index_file_path: str):
+    def __init__(self, index_file_path: str, top_k: int, **kwargs):
         if os.path.exists(index_file_path):
             self._index = InMemoryExactNNIndex[DocarrayVectorData](
                 index_file_path=index_file_path
             )
         else:
             self._index = InMemoryExactNNIndex[DocarrayVectorData]()
-        self.index_file_path = index_file_path
+        self._index_file_path = index_file_path
+        self._top_k = top_k
 
     def mul_add(self, datas: List[VectorData]) -> None:
         """
@@ -56,12 +59,14 @@ class DocArrayIndex(VectorBase):
         Search for the nearest vector data elements in the index.
 
         :param data: The query vector data.
-        :param top_k: The number of top matches to return. If -1, return all matches.
+        :param top_k: The number of top matches to return.
         :return: A list of tuples, each containing the match score and the ID of the matched vector data element.
         """
 
         if len(self._index) == 0:
             return None
+        if top_k == -1:
+            top_k = self._top_k
         query = parse_obj_as(NdArray, data)
         docs, scores = self._index.find(query, search_field="data", limit=top_k)
         return list(zip(scores, docs.id))
@@ -82,7 +87,7 @@ class DocArrayIndex(VectorBase):
             del self._index[ids]
 
     def flush(self) -> None:
-        self._index.persist(self.index_file_path)
+        self._index.persist(self._index_file_path)
 
     def close(self) -> None:
         self.flush()
