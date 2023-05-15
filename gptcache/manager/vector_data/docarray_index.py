@@ -32,12 +32,9 @@ class DocArrayIndex(VectorBase):
     """
 
     def __init__(self, index_file_path: str, top_k: int, **kwargs):
-        if os.path.exists(index_file_path):
-            self._index = InMemoryExactNNIndex[DocarrayVectorData](
-                index_file_path=index_file_path
-            )
-        else:
-            self._index = InMemoryExactNNIndex[DocarrayVectorData]()
+        self._index = InMemoryExactNNIndex[DocarrayVectorData](
+            index_file_path=index_file_path
+        )
         self._index_file_path = index_file_path
         self._top_k = top_k
 
