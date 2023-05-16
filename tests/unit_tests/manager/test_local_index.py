@@ -18,10 +18,10 @@ class TestLocalIndex(unittest.TestCase):
         self._internal_test_reload(Faiss)
         self._internal_test_delete(Faiss)
 
-        with TemporaryDirectory(dir="./") as root:
-            index_path = str((Path(root) / "index.bin").absolute())
+        with TemporaryDirectory(dir='./') as root:
+            index_path = str((Path(root) / 'index.bin').absolute())
             self._internal_test_create_from_vector_base(
-                name="faiss", top_k=3, dimension=512, index_path=index_path
+                name='faiss', top_k=3, dimension=512, index_path=index_path
             )
 
     def test_hnswlib(self):
@@ -31,10 +31,10 @@ class TestLocalIndex(unittest.TestCase):
         self._internal_test_reload(cls)
         self._internal_test_delete(cls)
 
-        with TemporaryDirectory(dir="./") as root:
-            index_path = str((Path(root) / "index.bin").absolute())
+        with TemporaryDirectory(dir='./') as root:
+            index_path = str((Path(root) / 'index.bin').absolute())
             self._internal_test_create_from_vector_base(
-                name="hnswlib",
+                name='hnswlib',
                 top_k=3,
                 dimension=512,
                 index_path=index_path,
@@ -47,15 +47,15 @@ class TestLocalIndex(unittest.TestCase):
         self._internal_test_reload(DocArrayIndex)
         self._internal_test_delete(DocArrayIndex)
 
-        with TemporaryDirectory(dir="./") as root:
-            index_path = str((Path(root) / "index.bin").absolute())
+        with TemporaryDirectory(dir='./') as root:
+            index_path = str((Path(root) / 'index.bin').absolute())
             self._internal_test_create_from_vector_base(
-                name="docarray", top_k=3, index_path=index_path
+                name='docarray', top_k=3, index_path=index_path
             )
 
     def _internal_test_normal(self, vector_class):
-        with TemporaryDirectory(dir="./") as root:
-            index_path = str((Path(root) / "index.bin").absolute())
+        with TemporaryDirectory(dir='./') as root:
+            index_path = str((Path(root) / 'index.bin').absolute())
             size = 1000
             dim = 512
             top_k = 10
@@ -71,8 +71,8 @@ class TestLocalIndex(unittest.TestCase):
             self.assertIn(ret[1][1], [0, size])
 
     def _internal_test_with_rebuild(self, vector_class):
-        with TemporaryDirectory(dir="./") as root:
-            index_path = str((Path(root) / "index.bin").absolute())
+        with TemporaryDirectory(dir='./') as root:
+            index_path = str((Path(root) / 'index.bin').absolute())
             size = 1000
             dim = 512
             top_k = 10
@@ -86,8 +86,8 @@ class TestLocalIndex(unittest.TestCase):
             self.assertNotEqual(index.search(data[0])[0], 0)
 
     def _internal_test_reload(self, vector_class):
-        with TemporaryDirectory(dir="./") as root:
-            index_path = str((Path(root) / "index.bin").absolute())
+        with TemporaryDirectory(dir='./') as root:
+            index_path = str((Path(root) / 'index.bin').absolute())
             size = 1000
             dim = 512
             top_k = 10
@@ -108,8 +108,8 @@ class TestLocalIndex(unittest.TestCase):
             self.assertIn(ret[1][1], [0, size])
 
     def _internal_test_delete(self, vector_class):
-        with TemporaryDirectory(dir="./") as root:
-            index_path = str((Path(root) / "index.bin").absolute())
+        with TemporaryDirectory(dir='./') as root:
+            index_path = str((Path(root) / 'index.bin').absolute())
             size = 1000
             dim = 512
             top_k = 10
@@ -121,7 +121,7 @@ class TestLocalIndex(unittest.TestCase):
             self.assertEqual(len(index.search(data[0])), top_k)
             index.delete([0, 1, 2, 3])
             self.assertNotEqual(index.search(data[0])[0][1], 0)
-            if hasattr(index, "count"):
+            if hasattr(index, 'count'):
                 self.assertEqual(index.count(), 996)
 
     def _internal_test_create_from_vector_base(self, **kwargs):
